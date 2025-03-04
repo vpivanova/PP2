@@ -52,6 +52,12 @@ model User {
     accounts      Account[]
     sessions      Session[]
 
+    firstname     String?
+    surname       String?
+
+    group Group? @relation(fields: [groupId], references: [id])
+    groupId String?
+    subgroup Int @default(1)
 }
 
 model VerificationToken {
@@ -60,4 +66,10 @@ model VerificationToken {
     expires    DateTime
 
     @@unique([identifier, token])
+}
+
+model Group {
+    id String @id @default(cuid())
+    name String @unique
+    users User[]
 }
