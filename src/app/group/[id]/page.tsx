@@ -1,6 +1,7 @@
 import React, { Suspense } from "react";
 import GroupUser from "~/app/_components/group/groupUser";
 import { deleteGroup, updateGroup } from "~/app/api/action/group";
+import UserSearch from "~/app/ui/userSearch";
 import { db } from "~/server/db";
 
 export default async function Page(props: {
@@ -45,7 +46,7 @@ export default async function Page(props: {
                     </button>
                 </div>
             </form>
-            {/* <UserSearch query={query} id_group={group.id} /> */}
+            <UserSearch query={query} id_group={group.id} />
             <Suspense fallback={<div>Loading...</div>}>
                 <GroupUser group={group} />
             </Suspense>
