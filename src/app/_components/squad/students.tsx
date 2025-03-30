@@ -9,9 +9,11 @@ import CheckIcon from "@heroicons/react/24/outline/CheckIcon";
 export function Students({
   taskId,
   squadId,
+  mode,
 }: {
   taskId: string;
   squadId: string;
+  mode: boolean
 }) {
   // const h = api.post.hello.useQuery({ text: "world" });
   // console.log("\n\nTRPC\n\n", h.data);

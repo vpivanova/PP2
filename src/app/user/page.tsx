@@ -2,6 +2,7 @@ import { db } from "~/server/db";
 import { AddUser } from "../_components/user/addUser";
 import UserTable from "../_components/user/userTable";
 import Pagination from "../ui/pagination";
+import { auth } from "~/server/auth";
 
 export default async function Page(props: {
   searchParams?: Promise<{
@@ -20,11 +21,13 @@ export default async function Page(props: {
   });
   const pages = Math.ceil(Number(count) / size);
   //const users = await db.user.findMany();
+
+  const role = (await auth())?.user.role;
   
   return (
     <>
       <h1>User page</h1>
-      <AddUser />
+      {role === "ADMIN" && <AddUser />}
       <UserTable users={users} />
       <Pagination totalPages={pages} />
     </>

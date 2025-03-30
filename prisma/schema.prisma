@@ -69,6 +69,8 @@ model User {
     studentTask StudentsOnTasks[]
     tutorTask   Squad[]
     grade       Grade[]
+
+    role    Role @default(USER)
 }
 
 model Group {
@@ -122,5 +124,11 @@ model Grade {
     student   User   @relation(fields: [studentId], references: [id])
     studentId String
     value     Int
+}
+
+enum Role {
+  USER
+  TUTOR
+  ADMIN
 }
 
