@@ -6,6 +6,7 @@ import TutorSearch from "../../ui/tutorSearch";
 import { db } from "~/server/db";
 import { Students } from "../../_components/squad/students";
 import { auth } from "~/server/auth";
+import { AdminRole, TutorRole, UserRole } from "~/app/_components/role/Role";
 // import { api } from "~/trpc/server";
 
 
@@ -35,62 +36,85 @@ export default async function Page(props: {
 
   const session = await auth();
   const role = session?.user.role;
-  const mode = role === "ADMIN" || (squad?.tutorId === session?.user.id);
+  const isTutor = squad?.tutorId === session?.user.id;
 
   // const gr = await api.post.hello({ text: "server world" });
   // console.log("\n\nTRPC\n\n", gr);
  
-  if(mode) return (
-    <main>
-      <Link href={`/task/${task?.id}`} className="btn btn-primary">
-        {task?.name}
-      </Link>
-      <div>
-        <table className="m-4 box-border">
-          <tbody>
-            <tr>
-              <td>Преподаватель:</td>
-              <td>
-                {tutor ? tutor.firstname + " " + tutor.surname : "Не назначен"}
-              </td>
-              <td>
-                <form action={deleteTutor} className="form-control">
-                  <input type="hidden" name="squadId" defaultValue={squad?.id} />
-                  <button type="submit">
-                    <UserMinusIcon className="w-6" />
-                  </button>
-                </form>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <TutorSearch
-          query={query}
-          squadId={squad?.id ?? ""}          
-        />
-      </div>
-      <Students squadId={squad?.id ?? ""} taskId={task?.id ?? ""} mode={true}/>
-    </main>
-  );
-
-  return (
-    <main>
-      <Link href={`/task/${task?.id}`} className="btn btn-primary">
-        {task?.name}
-      </Link>
-      <div>
-        <table className="m-4 box-border">
-          <tbody>
-            <tr>
-              <td>Преподаватель:</td>
-              <td>
-                {tutor ? tutor.firstname + " " + tutor.surname : "Не назначен"}
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <Students squadId={squad?.id ?? ""} taskId={task?.id ?? ""} mode={false}/>
-    </main>
-  );
+  if(role === "ADMIN" || isTutor) {
+    return (
+      <AdminRole squad={squad} query={query}>
+        <Link href={`/task/${task?.id}`} className="btn btn-primary">
+          {task?.name}
+        </Link>
+        <div>
+          <table className="m-4 box-border">
+            <tbody>
+              <tr>
+                <td>Преподаватель:</td>
+                <td>
+                  {tutor ? tutor.firstname + " " + tutor.surname : "Не назначен"}
+                </td>
+                <td>
+                  <form action={deleteTutor} className="form-control">
+                    <input type="hidden" name="squadId" defaultValue={squad?.id} />
+                    <button type="submit">
+                      <UserMinusIcon className="w-6" />
+                    </button>
+                  </form>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <TutorSearch
+            query={query}
+            squadId={squad?.id ?? ""}          
+          />
+        </div>
+        <Students squadId={squad?.id ?? ""} taskId={task?.id ?? ""} mode={true}/>
+      </AdminRole>
+    );
+  } else if(role === "TUTOR") {
+    return (
+      <TutorRole squad={squad}>
+        <Link href={`/task/${task?.id}`} className="btn btn-primary">
+          {task?.name}
+        </Link>
+        <div>
+          <table className="m-4 box-border">
+            <tbody>
+              <tr>
+                <td>Преподаватель:</td>
+                <td>
+                  {tutor ? tutor.firstname + " " + tutor.surname : "Не назначен"}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <Students squadId={squad?.id ?? ""} taskId={task?.id ?? ""} mode={false}/>
+      </TutorRole>
+    );
+  } else {
+    return (
+      <UserRole squad={squad}>
+        <Link href={`/task/${task?.id}`} className="btn btn-primary">
+          {task?.name}
+        </Link>
+        <div>
+          <table className="m-4 box-border">
+            <tbody>
+              <tr>
+                <td>Преподаватель:</td>
+                <td>
+                  {tutor ? tutor.firstname + " " + tutor.surname : "Не назначен"}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <Students squadId={squad?.id ?? ""} taskId={task?.id ?? ""} mode={false}/>
+      </UserRole>
+    );
+  }
 }

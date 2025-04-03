@@ -5,6 +5,7 @@ import Pagination from "../ui/pagination";
 import GroupTable from "../_components/group/groupTable";
 import { AddGroup } from "../_components/group/addGroup";
 import { auth } from "~/server/auth";
+import { AdminRole, TutorRole, UserRole } from "~/app/_components/role/Role";
 
 
 export default async function Page(props: {
@@ -27,12 +28,27 @@ export default async function Page(props: {
 
   const role = (await auth())?.user.role;
   
-  return (
-    <>
-      <h1>Group page</h1>
-      {role === "ADMIN" && <AddGroup />}
-      <GroupTable groups={groups} />
-      <Pagination totalPages={pages} />
-    </>
-  );
+  if (role === "ADMIN") {
+    return (
+      <AdminRole groups={groups}>
+        <AddGroup />
+        <GroupTable groups={groups} />
+        <Pagination totalPages={pages} />
+      </AdminRole>
+    );
+  } else if (role === "TUTOR") {
+    return (
+      <TutorRole groups={groups}>
+        <GroupTable groups={groups} />
+        <Pagination totalPages={pages} />
+      </TutorRole>
+    );
+  } else {
+    return (
+      <UserRole groups={groups}>
+        <GroupTable groups={groups} />
+        <Pagination totalPages={pages} />
+      </UserRole>
+    );
+  }
 }

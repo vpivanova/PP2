@@ -3,6 +3,7 @@ import { AddUser } from "../_components/user/addUser";
 import UserTable from "../_components/user/userTable";
 import Pagination from "../ui/pagination";
 import { auth } from "~/server/auth";
+import { AdminRole, TutorRole, UserRole } from "~/app/_components/role/Role";
 
 export default async function Page(props: {
   searchParams?: Promise<{
@@ -24,12 +25,30 @@ export default async function Page(props: {
 
   const role = (await auth())?.user.role;
   
-  return (
-    <>
-      <h1>User page</h1>
-      {role === "ADMIN" && <AddUser />}
-      <UserTable users={users} />
-      <Pagination totalPages={pages} />
-    </>
-  );
+  if (role === "ADMIN") {
+    return (
+      <AdminRole>
+        <h1>User page</h1>
+        <AddUser />
+        <UserTable users={users} />
+        <Pagination totalPages={pages} />
+      </AdminRole>
+    );
+  } else if (role === "TUTOR") {
+    return (
+      <TutorRole>
+        <h1>User page</h1>
+        <UserTable users={users} />
+        <Pagination totalPages={pages} />
+      </TutorRole>
+    );
+  } else {
+    return (
+      <UserRole>
+        <h1>User page</h1>
+        <UserTable users={users} />
+        <Pagination totalPages={pages} />
+      </UserRole>
+    );
+  }
 }

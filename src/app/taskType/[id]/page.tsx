@@ -4,6 +4,7 @@ import { TaskTable } from "~/app/_components/task/table";
 import { deleteTaskType, updateTaskType } from "~/app/api/action/taskType";
 import { auth } from "~/server/auth";
 import { db } from "~/server/db";
+import { AdminRole, TutorRole, UserRole } from "~/app/_components/role/Role";
 
 export default async function Page(props: { 
   params: Promise<{ id: string }>,
@@ -20,43 +21,44 @@ export default async function Page(props: {
     );
 
   const role = (await auth())?.user.role;
-  const mode = role === "ADMIN" || role === "TUTOR";
 
-  if(mode) return (
-    <main>
-      <form action={updateTaskType} className="form-control">
-        <div className="flex max-w-xs flex-col space-y-2">
-          <input type="hidden" name="id" defaultValue={taskType.id ?? ""} />
-          <label>Название</label>
-          <input
-            type="text"
-            name="name"
-            required
-            className="input input-bordered"
-            defaultValue={taskType.name ?? ""}
-          />
-          <button type="submit" className="btn btn-primary">
-            Обновить
-          </button>
-        </div>
-      </form>
-      <form action={deleteTaskType} className="form-control">
-        <div className="flex max-w-xs flex-col space-y-2">
-          <input type="hidden" name="id" defaultValue={taskType.id ?? ""} />
-          <button type="submit" className="btn btn-primary">
-            Удалить
-          </button>
-        </div>
-      </form>
-      <AddTask taskType={taskType} />
-      <TaskTable tasks={tasks} />
-    </main>
-  );
-
-  return (
-    <main>
-      <h1>{taskType.name}</h1>
-      <TaskTable tasks={tasks} />
-    </main>
-  );
+  if(role === "ADMIN" || role === "TUTOR") {
+    return (
+      <AdminRole taskType={taskType} tasks={tasks}>
+        <form action={updateTaskType} className="form-control">
+          <div className="flex max-w-xs flex-col space-y-2">
+            <input type="hidden" name="id" defaultValue={taskType.id ?? ""} />
+            <label>Название</label>
+            <input
+              type="text"
+              name="name"
+              required
+              className="input input-bordered"
+              defaultValue={taskType.name ?? ""}
+            />
+            <button type="submit" className="btn btn-primary">
+              Обновить
+            </button>
+          </div>
+        </form>
+        <form action={deleteTaskType} className="form-control">
+          <div className="flex max-w-xs flex-col space-y-2">
+            <input type="hidden" name="id" defaultValue={taskType.id ?? ""} />
+            <button type="submit" className="btn btn-primary">
+              Удалить
+            </button>
+          </div>
+        </form>
+        <AddTask taskType={taskType} />
+        <TaskTable tasks={tasks} />
+      </AdminRole>
+    );
+  } else {
+    return (
+      <UserRole taskType={taskType} tasks={tasks}>
+        <h1>{taskType.name}</h1>
+        <TaskTable tasks={tasks} />
+      </UserRole>
+    );
+  }
 }

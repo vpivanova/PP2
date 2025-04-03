@@ -4,6 +4,7 @@ import Pagination from "../ui/pagination";
 import TaskTypeTable from "../_components/taskType/table";
 import { AddTaskGroup } from "../_components/taskType/add";
 import { auth } from "~/server/auth";
+import { AdminRole, TutorRole, UserRole } from "~/app/_components/role/Role";
 
 export default async function Page(props: {
   searchParams?: Promise<{
@@ -24,13 +25,21 @@ export default async function Page(props: {
   const pages = Math.ceil(Number(count) / size);
 
   const role = (await auth())?.user.role;
-  const mode = role === "ADMIN" || role === "TUTOR";
 
-  return (
-    <div>
-      {mode && <AddTaskGroup />}
-      <TaskTypeTable tasks={taskGroups} />
-      <Pagination totalPages={pages} />
-    </div>
-  );
+  if (role === "ADMIN" || role === "TUTOR") {
+    return (
+      <AdminRole tasks={taskGroups}>
+        <AddTaskGroup />
+        <TaskTypeTable tasks={taskGroups} />
+        <Pagination totalPages={pages} />
+      </AdminRole>
+    );
+  } else {
+    return (
+      <UserRole tasks={taskGroups}>
+        <TaskTypeTable tasks={taskGroups} />
+        <Pagination totalPages={pages} />
+      </UserRole>
+    );
+  }
 }

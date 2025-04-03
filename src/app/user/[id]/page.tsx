@@ -3,9 +3,7 @@ import React from "react";
 import { deleteUser, updateUser } from "~/app/api/action/user";
 import { auth } from "~/server/auth";
 import { db } from "~/server/db";
-import Admin from "~/app/_components/role/Admin";
-import Tutor from "~/app/_components/role/Tutor";
-import User from "~/app/_components/role/User";
+import { AdminRole, TutorRole, UserRole } from "~/app/_components/role/Role";
 
 export default async function Page(
   props: { params: Promise<{ id: string }> }
@@ -24,10 +22,10 @@ export default async function Page(
 
   switch (role) {
     case "ADMIN":
-      return <Admin user={user} />;
+      return <AdminRole user={user} />;
     case "TUTOR":
-      return <Tutor user={user} />;
+      return <TutorRole user={user} />;
     default:
-      return <User user={user} />;
+      return <UserRole user={user} />;
   }
 }
