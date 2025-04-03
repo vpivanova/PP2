@@ -4,9 +4,11 @@ import { type User, type Group } from "@prisma/client";
 
 interface TutorProps {
   user: User & { group?: Group | null };
+  tutorsJSX?: React.ReactNode;
+  studentsJSX?: React.ReactNode;
 }
 
-export default function Tutor({ user }: TutorProps) {
+export default function Tutor({ user, tutorsJSX, studentsJSX }: TutorProps) {
   const groupJSX = user?.group && (
     <>
       <label>Группа</label>
@@ -18,12 +20,28 @@ export default function Tutor({ user }: TutorProps) {
 
   return (
     <main>
-      <h1>Данные пользователя</h1>
-      <p>Электронная почта: {user.email}</p>
-      <p>Имя: {user.firstname}</p>
-      <p>Фамилия: {user.surname}</p>
-      <p>Роль: {user.role}</p>
-      {groupJSX}
+      <h1>{user?.firstname + " " + user?.surname}</h1>
+      <div>
+        <p>Электронная почта: {user.email}</p>
+        <p>Имя: {user.firstname}</p>
+        <p>Фамилия: {user.surname}</p>
+        <p>Роль: {user.role}</p>
+        {groupJSX}
+      </div>
+
+      {tutorsJSX && (
+        <div>
+          <h2>Преподаватель</h2>
+          {tutorsJSX}
+        </div>
+      )}
+
+      {studentsJSX && (
+        <div>
+          <h2>Студент</h2>
+          {studentsJSX}
+        </div>
+      )}
     </main>
   );
 }

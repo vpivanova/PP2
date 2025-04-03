@@ -5,9 +5,11 @@ import { type User, type Group } from "@prisma/client";
 
 interface AdminProps {
   user: User & { group?: Group | null };
+  tutorsJSX?: React.ReactNode;
+  studentsJSX?: React.ReactNode;
 }
 
-export default function Admin({ user }: AdminProps) {
+export default function Admin({ user, tutorsJSX, studentsJSX }: AdminProps) {
   const groupJSX = user?.group && (
     <>
       <label>Группа</label>
@@ -19,6 +21,7 @@ export default function Admin({ user }: AdminProps) {
 
   return (
     <main>
+      <h1>{user?.firstname + " " + user?.surname}</h1>
       <form action={updateUser} className="form-control">
         <div className="flex max-w-xs flex-col space-y-2">
           <input type="hidden" name="id" defaultValue={user.id ?? ""} />
@@ -63,6 +66,21 @@ export default function Admin({ user }: AdminProps) {
           </button>
         </div>
       </form>
+
+      {tutorsJSX && (
+        <div>
+          <h2>Преподаватель</h2>
+          {tutorsJSX}
+        </div>
+      )}
+
+      {studentsJSX && (
+        <div>
+          <h2>Студент</h2>
+          {studentsJSX}
+        </div>
+      )}
+
       <form action={deleteUser} className="form-control">
         <div className="flex max-w-xs flex-col space-y-2">
           <input type="hidden" name="id" defaultValue={user.id ?? ""} />
