@@ -2,6 +2,9 @@ import Link from "next/link";
 import React from "react";
 import { auth } from "~/server/auth";
 import { db } from "~/server/db";
+import Admin from "~/app/_components/role/Admin";
+import Tutor from "~/app/_components/role/Tutor";
+import User from "~/app/_components/role/User";
 
 export default async function Page() {
   const session = await auth();
@@ -48,13 +51,27 @@ export default async function Page() {
       </p>
     </div>
   ));
-  return (
-    <div>
-      <h1>{user?.firstname + " " + user?.surname}</h1>
-      <h2>Преподаватель</h2>
-      {tutorsJSX}
-      <h2>Студент</h2>
-      {studentsJSX}
-    </div>
-  );
+
+  const role = session?.user.role;
+
+  switch (role) {
+    case "ADMIN":
+      return <Admin 
+        user={user} 
+        tutorsJSX={tutorsJSX} 
+        studentsJSX={studentsJSX} 
+      />;
+    case "TUTOR":
+      return <Tutor 
+        user={user} 
+        tutorsJSX={tutorsJSX} 
+        studentsJSX={studentsJSX} 
+      />;
+    default:
+      return <User 
+        user={user} 
+        tutorsJSX={tutorsJSX} 
+        studentsJSX={studentsJSX} 
+      />;
+  }
 }
