@@ -69,7 +69,8 @@ export default async function Page(props: {
           squadId={squad?.id ?? ""}          
         />
       </div>
-      <Students squadId={squad?.id ?? ""} taskId={task?.id ?? ""} mode={true}/>
+      <Students squadId={squad?.id ?? ""} taskId={task?.id ?? ""} mode={true} squadTutorId={tutor?.id ?? ""}/>
+      {/* <Students squadId={squad?.id ?? ""} taskId={task?.id ?? ""} mode={true}/> */}
     </main>
   );
 
@@ -90,7 +91,8 @@ export default async function Page(props: {
           </tbody>
         </table>
       </div>
-      <Students squadId={squad?.id ?? ""} taskId={task?.id ?? ""} mode={false}/>
+      <Students squadId={squad?.id ?? ""} taskId={task?.id ?? ""} mode={true} squadTutorId={tutor?.id ?? ""}/>
+      {/* <Students squadId={squad?.id ?? ""} taskId={task?.id ?? ""} mode={false}/> */}
     </main>
   );
 }
