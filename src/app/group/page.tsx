@@ -18,10 +18,10 @@ export default async function Page(props: {
   const size = Number(searchParams?.size) || 3;
 
   const count = await db.group.count();
-  const groups = await db.group.findMany({
-    skip: (page - 1) * size,
-    take: size,
-  });
+  // const groups = await db.group.findMany({
+  //   skip: (page - 1) * size,
+  //   take: size,
+  // });
   const pages = Math.ceil(Number(count) / size);
   //const users = await db.user.findMany();
 
@@ -31,7 +31,7 @@ export default async function Page(props: {
     <>
       <h1>Group page</h1>
       {role === "ADMIN" && <AddGroup />}
-      <GroupTable groups={groups} />
+      <GroupTable page={page} size={size} key={page}/>
       <Pagination totalPages={pages} />
     </>
   );
