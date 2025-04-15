@@ -30,7 +30,7 @@ export default async function Page(props: {
   return (
     <>
       <h1>Group page</h1>
-      {role === "ADMIN" && <AddGroup />}
+      {<AddGroup />}
       <GroupTable page={page} size={size} key={page}/>
       <Pagination totalPages={pages} />
     </>

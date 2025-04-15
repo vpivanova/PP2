@@ -4,6 +4,10 @@ import { deleteUser, updateUser } from "~/app/api/action/user";
 import { auth } from "~/server/auth";
 import { db } from "~/server/db";
 
+import Admin from "~/app/_components/role/Admin";
+import Tutor from "~/app/_components/role/Tutor";
+import User from "~/app/_components/role/User";
+
 export default async function Page(
   props: { params: Promise<{ id: string }> }
 ) {
@@ -12,8 +16,8 @@ export default async function Page(
   const params = await props.params;
   const user = await db.user.findUnique({ where: { id: params.id }, include: {group: true,}, });
 
-  const groupJSX = user?.group && <><label>Группа</label><Link className="btn"  href={"/group/" 
-    + user?.group.id}>{user?.group.name + "-" + user.subgroup}</Link></>;
+  // const groupJSX = user?.group && <><label>Группа</label><Link className="btn"  href={"/group/" 
+  //   + user?.group.id}>{user?.group.name + "-" + user.subgroup}</Link></>;
 
   if (!user)
     return (
@@ -22,71 +26,14 @@ export default async function Page(
       </main>
     );
 
-  if (role == "ADMIN") return (
-    <main>
-      <form action={updateUser} className="form-control">
-        <div className="flex max-w-xs flex-col space-y-2">
-          <input type="hidden" name="id" defaultValue={user.id ?? ""} />
-          <label>Электронная почта</label>
-          <input
-            type="email"
-            name="email"
-            required
-            className="input input-bordered"
-            defaultValue={user.email ?? ""}
-          />
-          <label>Имя</label>
-          <input
-            type="text"
-            name="firstname"
-            required
-            className="input input-bordered"
-            defaultValue={user.firstname ?? ""}
-          />
-          <label>Фамилия</label>
-          <input
-            type="text"
-            name="surname"
-            required
-            className="input input-bordered"
-            defaultValue={user.surname ?? ""}
-          /> 
-          <label>Роль</label>
-          <select
-            name="role"
-            required
-            className="select select-bordered"
-            defaultValue={user.role ?? "USER"}
-          >
-            <option value="USER">USER</option>
-            <option value="ADMIN">ADMIN</option>
-            <option value="TUTOR">TUTOR</option>
-          </select>
-          {groupJSX}         
-          <button type="submit" className="btn btn-primary">
-            Обновить
-          </button>
-        </div>
-      </form>
-      <form action={deleteUser} className="form-control">
-        <div className="flex max-w-xs flex-col space-y-2">
-          <input type="hidden" name="id" defaultValue={user.id ?? ""} />
-          <button type="submit" className="btn btn-primary">
-            Удалить
-          </button>
-        </div>
-      </form>
-    </main>
-  );
+//   
 
-  return (
-    <main>
-      <h1>Данные пользователя</h1>
-      <p>Электронная почта: {user.email}</p>
-      <p>Имя: {user.firstname}</p>
-      <p>Фамилия: {user.surname}</p>
-      <p>Роль: {user.role}</p>
-      {groupJSX}
-    </main>
-  )
+switch (role) {
+  case "ADMIN":
+    return <Admin user={user} />;
+  case "TUTOR":
+    return <Tutor user={user} />;
+  default:
+    return <User user={user} />;
+}
 }

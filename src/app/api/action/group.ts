@@ -1,11 +1,16 @@
 "use server";
 
+import { error } from "console";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { db } from "~/server/db";
+import { isAdmin } from "../auth/checks";
 
 export async function createGroup(formData: FormData) {
+  if (!(await isAdmin())) {
+    return { error: "Tp"}
+  }
     const fd = z
       .object({
         name: z.string(),
