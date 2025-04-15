@@ -18,3 +18,22 @@ export async function PUT(
         headers: { "Content-Type": "application/json" },
     });
 }
+
+
+export async function POST(request: NextRequest) {
+    const { name } = await request.json();
+    
+    // Создание новой группы в базе данных
+    const newGroup = await db.group.create({
+        data: {
+            name,
+        },
+    });
+
+    return new Response(JSON.stringify(newGroup), {
+        status: 201, // Статус 201 для успешного создания
+        headers: { "Content-Type": "application/json" },
+    });
+}
+
+  

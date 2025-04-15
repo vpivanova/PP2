@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React from "react";
 import { CheckIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
 import type { Group } from "@prisma/client";
 import Link from "next/link";
@@ -19,7 +19,7 @@ export default function GroupTable({
     queryKey: ["groups", page, size],
     queryFn: async () => {
       const groups = await fetch(url).then((res) => res.json());
-      //setGroupsNames(groups.map((u: Group) => u.name)); //!!!!!!!!!    
+      setGroupsNames(groups.map((u: Group) => u.name)); //!!!!!!!!!    
       return groups;
     },
   });
@@ -33,12 +33,6 @@ export default function GroupTable({
       return response.json();
     },
   });
-
-  useEffect(() => {
-    if(data){
-      setGroupsNames(groups.map((u: Group) => u.name));
-    }
-  }, [data]);
     
   if (isPending) {
     return <span>Loading...</span>;

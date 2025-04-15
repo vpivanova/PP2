@@ -25,5 +25,5 @@ export default async function Page(props: {
     if (role === "ADMIN")
     return <AdminGroupComp group={group} query={query} />;
 
-  return <UserGroupComp group={group} />;
+    return <UserGroupComp group={group} />;
 }

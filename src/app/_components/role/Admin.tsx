@@ -1,13 +1,19 @@
 import Link from "next/link";
 import React, { Suspense } from "react";
 import { deleteUser, updateUser } from "~/app/api/action/user";
-import { type User, type Group } from "@prisma/client";
+import { type Group } from "@prisma/client";
+import { type User } from "@prisma/client";
 import GroupUser from "~/app/_components/group/groupUser";
 import UserSearch from "~/app/ui/userSearch";
 import { deleteGroup, updateGroup } from "~/app/api/action/group";
 import { TaskTable } from "../task/table";
 import { AddTask } from "../task/add";
 import { deleteTaskType, updateTaskType } from "~/app/api/action/taskType";
+import TutorSearch from "~/app/ui/tutorSearch";
+import { Students } from "../squad/students";
+import { deleteTutor } from "~/app/api/action/squad";
+import { UserMinusIcon } from "@heroicons/react/24/outline";
+
 
 
 interface AdminProps {
@@ -240,70 +246,45 @@ export function AdminTaskTypeComp({ taskType, tasks }: { taskType: any; tasks: a
   );
 }
 
-// export function AdminUserComp({ user }: { user: any }) {
-// const groupJSX = user?.group && (
-//   <>
-//     <label>Группа</label>
-//     <Link className="both" href={"/group/" + user?.group.id}>
-//       {user?.group.name + "-" + user.subgroup}
-//     </Link>
-//   </>
-// );
 
-// return (
-//   <main>
-//     <form action={updateUser} className="form-control">
-//       <div className="flex max-w-xs flex-col space-y-2">
-//         <input type="hidden" name="id" defaultValue={user.id ?? ""} />
-//         <label>Электронная почта</label>
-//         <input
-//           type="email"
-//           name="email"
-//           required
-//           className="input input-bordered"
-//           defaultValue={user.email ?? ""}
-//         />
-//         <label>Имя</label>
-//         <input
-//           type="text"
-//           name="firstname"
-//           required
-//           className="input input-bordered"
-//           defaultValue={user.firstname ?? ""}
-//         />
-//         <label>Фамилия</label>
-//         <input
-//           type="text"
-//           name="surname"
-//           required
-//           className="input input-bordered"
-//           defaultValue={user.surname ?? ""}
-//         />
-//         <label>Роль</label>
-//         <select
-//           name="role"
-//           required
-//           className="select select-bordered"
-//           defaultValue={user.role ?? "USER"}
-//         >
-//           <option value="USER">USER</option>
-//           <option value="ADMIN">ADMIN</option>
-//           <option value="TUTOR">TUTOR</option>
-//         </select>
-//         {groupJSX}
-//         <button type="submit" className="btn btn-primary">
-//           Обновить
-//         </button>
+// export function AdminSquadComp({
+//   task,
+//   tutor,
+//   squadId,
+//   query,
+// }: {
+//   task?: { id: string; name: string } | null;
+//   tutor?: { id: string; firstname: string | null; surname: string | null } | null;
+//   squadId: string;
+//   query: string;
+// }) {
+//   return (
+//     <main>
+//       <Link href={`/task/${task?.id}`} className="btn btn-primary">
+//         {task?.name}
+//       </Link>
+//       <div>
+//         <table className="m-4 box-border">
+//           <tbody>
+//             <tr>
+//               <td>Преподаватель:</td>
+//               <td>
+//                 {tutor ? `${tutor.firstname} ${tutor.surname}` : "Не назначен"}
+//               </td>
+//               <td>
+//                 <form action={deleteTutor} className="form-control">
+//                   <input type="hidden" name="squadId" defaultValue={squad?.id} />
+//                   <button type="submit">
+//                     <User MinusIcon className="w-6" />
+//                   </button>
+//                 </form>
+//               </td>
+//             </tr>
+//           </tbody>
+//         </table>
+//         <TutorSearch query={query} squadId={squad.id} />
 //       </div>
-//     </form>
-//     <form action={deleteUser} className="form-control">
-//       <div className="flex max-w-xs flex-col space-y-2">
-//         <input type="hidden" name="id" defaultValue={user.id ?? ""} />
-//         <button type="submit" className="btn btn-primary">
-//           Удалить
-//         </button>
-//       </div>
-//     </form>
-//   </main>
-// );
+//       <Students squadId={squad.id} taskId={task?.id ?? ""} mode={true} squadTutorId={tutor?.id ?? ""} />
+//     </main>
+//   );
 // }

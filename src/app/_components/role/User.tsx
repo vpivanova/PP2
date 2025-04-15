@@ -38,7 +38,7 @@ export default function User({ user }: UserProps) {
   }: {
     task?: { id: string; name: string } | null;
     tutor?:{ id: string; firstname: string | null; surname: string | null } | null;
-    // squad?: { id: string; name: string} | null;
+    //squad?: { id: string; name: string} | null;
     squad?: {
       id: string;
       task: true, 
