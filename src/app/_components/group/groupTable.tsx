@@ -1,7 +1,7 @@
 "use client";
 
-import React from "react";
-import { CheckIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
+import React, { useEffect, useState } from "react";
+import { CheckIcon, PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
 import type { Group } from "@prisma/client";
 import Link from "next/link";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -13,13 +13,14 @@ export default function GroupTable({
   page?: number;
   size?: number;
 }) {
-  const [groupNames, setGroupsNames] = React.useState<string[]>([]);
+  const [groupNames, setGroupsNames] = useState<string[]>([]);
+  const [groups, setGroups] = useState<Group[]>([]);
   const url = `/api/group?size=${size || 3}&page=${page || 1}`;
+  
   const { isPending, isError, data, error } = useQuery({
     queryKey: ["groups", page, size],
     queryFn: async () => {
       const groups = await fetch(url).then((res) => res.json());
-      setGroupsNames(groups.map((u: Group) => u.name)); //!!!!!!!!!    
       return groups;
     },
   });
@@ -29,11 +30,32 @@ export default function GroupTable({
       const response = await fetch(`/api/group/${group.id}`, {
         method: "PUT",
         body: JSON.stringify(group),
+        headers: { "Content-Type": "application/json" },
       });
       return response.json();
     },
   });
-    
+
+  const deleteMutation = useMutation({
+    mutationFn: async (id: string) => {
+      const response = await fetch(`/api/group/${id}`, {
+        method: "DELETE",
+      });
+      return response.json();
+    },
+    onSuccess: () => {
+      // Обновляем страницу после успешного удаления
+      window.location.reload();
+    },
+  });
+
+  useEffect(() => {
+    if (data) {
+      setGroups(data);
+      setGroupsNames(data.map((u: Group) => u.name));
+    }
+  }, [data]);
+
   if (isPending) {
     return <span>Loading...</span>;
   }
@@ -42,10 +64,8 @@ export default function GroupTable({
     return <span>Error: {error.message}</span>;
   }
 
-  const groups: Group[] = data || [];
-
   function handleChangeName(id: string, index: number) {
-    putMutation.mutate({ id, name: groupNames[index]??"" });
+    putMutation.mutate({ id, name: groupNames[index] ?? "" });
   }
 
   function handleEditGroup(index: number, name: string) {
@@ -54,6 +74,10 @@ export default function GroupTable({
       name,
       ...prev.slice(index + 1),
     ]);
+  }
+
+  function handleDeleteGroup(id: string) {
+    deleteMutation.mutate(id);
   }
 
   return (
@@ -72,11 +96,11 @@ export default function GroupTable({
               <td className="px-2">
                 <input
                   className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
-                  placeholder={"Имя пользователя"}
+                  placeholder={"Имя группы"}
                   onChange={(e) => {
                     handleEditGroup(index, e.target.value);
                   }}
-                  defaultValue={groupNames[index]}
+                  value={groupNames[index] || ""}
                 />
               </td>
               <td className="px-2">
@@ -88,6 +112,11 @@ export default function GroupTable({
                 <Link href={`/group/${u.id}`}>
                   <PencilSquareIcon className="w-4" />
                 </Link>
+              </td>
+              <td className="px-2">
+                <button onClick={() => handleDeleteGroup(u.id)}>
+                  <TrashIcon className="w-6 text-red-500" />
+                </button>
               </td>
             </tr>
           ))}

@@ -19,19 +19,15 @@ export async function PUT(
     });
 }
 
-
-export async function POST(request: NextRequest) {
-    const { name } = await request.json();
-    
-    // Создание новой группы в базе данных
-    const newGroup = await db.group.create({
-        data: {
-            name,
-        },
+export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
+    const { id } = params;
+   
+    const deletedGroup = await db.group.delete({
+        where: { id },
     });
 
-    return new Response(JSON.stringify(newGroup), {
-        status: 201, // Статус 201 для успешного создания
+    return new Response(JSON.stringify(deletedGroup), {
+        status: 200,
         headers: { "Content-Type": "application/json" },
     });
 }
