@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { CheckIcon, PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
+import { CheckIcon, PencilSquareIcon, TrashIcon, TruckIcon } from "@heroicons/react/24/outline";
 import type { Group } from "@prisma/client";
 import Link from "next/link";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -44,7 +44,7 @@ export default function GroupTable({
       return response.json();
     },
     onSuccess: () => {
-      // Обновляем страницу после успешного удаления
+      // Обновляем страницу после удаления
       window.location.reload();
     },
   });

@@ -9,7 +9,7 @@ import { isAdmin } from "../auth/checks";
 
 export async function createGroup(formData: FormData) {
   if (!(await isAdmin())) {
-    return { error: "Tp"}
+    return { error: "Нет прав"}
   }
     const fd = z
       .object({
@@ -23,6 +23,9 @@ export async function createGroup(formData: FormData) {
   }
 
   export async function deleteGroup(formData: FormData) {
+    if (!(await isAdmin())) {
+      return { error: "Нет прав"}
+    }
     const fd = z
       .object({
         id: z.string()
@@ -35,6 +38,9 @@ export async function createGroup(formData: FormData) {
   }
   
   export async function updateGroup(formData: FormData) {
+    if (!(await isAdmin())) {
+      return { error: "Нет прав"}
+    }
     const fd = z
       .object({
         id: z.string(),
@@ -49,6 +55,9 @@ export async function createGroup(formData: FormData) {
   }
   
   export async function deleteUserFromGroup(formData: FormData) {
+    if (!(await isAdmin())) {
+      return { error: "Нет прав"}
+    }
     const fd = z
       .object({
         id_student: z.string(),
@@ -70,6 +79,9 @@ export async function createGroup(formData: FormData) {
   }
 
   export async function addUserToGroup(formData: FormData) {
+    if (!(await isAdmin())) {
+      return { error: "Нет прав"}
+    }
     const fd = z
       .object({
         id_student: z.string(),

@@ -19,14 +19,14 @@ export function AddGroup() {
       return response.json();
     },
     onSuccess: () => {
-      setName(""); // Очистка поля после успешного добавления
-      window.location.reload(); // Обновление страницы для получения актуальных данных
+      setName(""); 
+      window.location.reload(); 
     },
   });
 
   const addGroup = (e: React.FormEvent) => {
-    e.preventDefault(); // Предотвращаем стандартное поведение формы
-    postMutation.mutate({ name }); // Отправляем только название группы
+    e.preventDefault(); 
+    postMutation.mutate({ name }); 
   };
 
   return (

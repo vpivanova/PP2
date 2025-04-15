@@ -9,7 +9,7 @@ import { isAdmin } from "../auth/checks";
 
 export async function createUser(formData: FormData) {
   if(!(await isAdmin())) 
-    throw new Error("Unauthorized");
+    throw new Error("Нет прав");
     const fd = z
       .object({
         email: z.string().email(),
@@ -26,6 +26,9 @@ export async function createUser(formData: FormData) {
   }
 
   export async function deleteUser(formData: FormData) {
+    if (!(await isAdmin())) {
+      return { error: "Нет прав"}
+    }
     const fd = z
       .object({
         id: z.string(),
@@ -38,6 +41,9 @@ export async function createUser(formData: FormData) {
   }
 
   export async function updateUser(formData: FormData) {
+    if (!(await isAdmin())) {
+      return { error: "Нет прав"}
+    }
     const fd = z
       .object({
         id: z.string(),      

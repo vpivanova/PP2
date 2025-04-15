@@ -4,8 +4,12 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { db } from "~/server/db";
+import { isAdmin } from "../auth/checks";
 
 export async function createTask(formData: FormData) {
+  if (!(await isAdmin())) {
+    return { error: "Нет прав"}
+  }
   const fd = z
     .object({
       taskTypeId: z.string(),
@@ -21,6 +25,9 @@ export async function createTask(formData: FormData) {
 }
 
 export async function deleteTask(formData: FormData) {
+  if (!(await isAdmin())) {
+    return { error: "Нет прав"}
+  }
   const fd = z
     .object({
       id: z.string(),
@@ -35,6 +42,9 @@ export async function deleteTask(formData: FormData) {
 }
 
 export async function updateTask(formData: FormData) {
+  if (!(await isAdmin())) {
+    return { error: "Нет прав"}
+  }
   const fd = z
     .object({
       id: z.string(),
@@ -51,6 +61,9 @@ export async function updateTask(formData: FormData) {
 }
 
 export async function addUserTask(formData: FormData) {
+  if (!(await isAdmin())) {
+    return { error: "Нет прав"}
+  }
   const id = formData.get("id") as string;
   await db.squad.create({
     data: { taskId: id, date: new Date() },
@@ -59,6 +72,9 @@ export async function addUserTask(formData: FormData) {
 }
 
 export async function deleteUserTask(formData: FormData) {
+  if (!(await isAdmin())) {
+    return { error: "Нет прав"}
+  }
   const id = formData.get("id") as string;
   await db.squad.delete({ where: { id: id } });
   revalidatePath("/task/" + id);

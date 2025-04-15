@@ -4,8 +4,12 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { db } from "~/server/db";
+import { isAdmin } from "../auth/checks";
 
 export async function createTaskType(formData: FormData) {
+  if (!(await isAdmin())) {
+    return { error: "Нет прав"}
+  }
   const fd = z
     .object({
       name: z.string(),
@@ -18,6 +22,9 @@ export async function createTaskType(formData: FormData) {
 }
 
 export async function updateTaskType(formData: FormData) {
+  if (!(await isAdmin())) {
+    return { error: "Нет прав"}
+  }
   const fd = z
     .object({
       id: z.string(),
@@ -32,6 +39,9 @@ export async function updateTaskType(formData: FormData) {
 }
 
 export async function deleteTaskType(formData: FormData) {
+  if (!(await isAdmin())) {
+    return { error: "Нет прав"}
+  }
   const fd = z
     .object({
       id: z.string(),
