@@ -1,4 +1,5 @@
 import { NextRequest } from "next/server";
+import { sleep } from "node_modules/@trpc/server/dist/unstable-core-do-not-import/utils";
 import { db } from "~/server/db";
 
 export async function PUT(
@@ -25,7 +26,7 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
     const deletedGroup = await db.group.delete({
         where: { id },
     });
-
+    await sleep(9000);
     return new Response(JSON.stringify(deletedGroup), {
         status: 200,
         headers: { "Content-Type": "application/json" },

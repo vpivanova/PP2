@@ -1,4 +1,6 @@
+//import { sleep } from "@trpc/server/unstable-core-do-not-import";
 import { NextRequest } from "next/server";
+import { sleep } from "node_modules/@trpc/server/dist/unstable-core-do-not-import/utils";
 //import { sleep } from "~/lib/utils";
 import { db } from "~/server/db";
 
@@ -10,7 +12,7 @@ export async function GET(request: NextRequest) {
     skip: (page - 1) * size,
     take: size,
   });
-  //await sleep(1000);
+  await sleep(1000);
   return new Response(JSON.stringify(groups), {
     status: 200,
     headers: { "Content-Type": "application/json" },

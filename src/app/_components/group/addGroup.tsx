@@ -2,10 +2,11 @@
 
 import React, { useState } from "react";
 import { FolderPlusIcon } from "@heroicons/react/24/outline";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export function AddGroup() {
   const [name, setName] = useState("");
+  const queryClient = useQueryClient();
 
   const postMutation = useMutation({
     mutationFn: async (group: { name: string }) => {
@@ -20,7 +21,8 @@ export function AddGroup() {
     },
     onSuccess: () => {
       setName(""); 
-      window.location.reload(); 
+      queryClient.invalidateQueries({ queryKey: ["groups"] }); 
+
     },
   });
 
@@ -53,5 +55,3 @@ export function AddGroup() {
     </details>
   );
 }
-
-

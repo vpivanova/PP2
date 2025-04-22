@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { CheckIcon, PencilSquareIcon, TrashIcon, TruckIcon } from "@heroicons/react/24/outline";
 import type { Group } from "@prisma/client";
 import Link from "next/link";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export default function GroupTable({
   page,
@@ -16,7 +16,8 @@ export default function GroupTable({
   const [groupNames, setGroupsNames] = useState<string[]>([]);
   const [groups, setGroups] = useState<Group[]>([]);
   const url = `/api/group?size=${size || 3}&page=${page || 1}`;
-  
+  const queryClient = useQueryClient();
+
   const { isPending, isError, data, error } = useQuery({
     queryKey: ["groups", page, size],
     queryFn: async () => {
@@ -34,6 +35,9 @@ export default function GroupTable({
       });
       return response.json();
     },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["groups"] }); 
+    },
   });
 
   const deleteMutation = useMutation({
@@ -44,10 +48,18 @@ export default function GroupTable({
       return response.json();
     },
     onSuccess: () => {
-      // Обновляем страницу после удаления
-      window.location.reload();
+      queryClient.invalidateQueries({ queryKey: ["groups"] }); 
     },
   });
+    // onSuccess: () => {
+    //   setTimeout(() => {
+    //     window.location.reload();
+    //   }, 500);
+    //   // Обновляем страницу после удаления
+    //   //window.location.reload();
+    // },
+    
+  //});
 
   useEffect(() => {
     if (data) {
