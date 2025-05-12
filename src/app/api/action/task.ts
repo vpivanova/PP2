@@ -14,10 +14,12 @@ export async function createTask(formData: FormData) {
     .object({
       taskTypeId: z.string(),
       name: z.string(),
+      //value: z.string().transform(Number)
     })
     .parse({
       taskTypeId: formData.get("taskTypeId"),
       name: formData.get("name"),
+      //value: formData.get("value"),
     });
   const task = await db.task.create({ data: fd });
   await db.squad.create({ data: { taskId: task.id, date: new Date() } });

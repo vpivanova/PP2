@@ -54,7 +54,7 @@ export default async function Page(props: {
                 {tutor ? tutor.firstname + " " + tutor.surname : "Не назначен"}
               </td>
               <td>
-                <form action={deleteTutor} className="form-control">
+                <form action={deleteTutor as any} className="form-control">
                   <input type="hidden" name="squadId" defaultValue={squad?.id} />
                   <button type="submit">
                     <UserMinusIcon className="w-6" />

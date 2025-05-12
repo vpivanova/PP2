@@ -51,7 +51,8 @@ export async function createGroup(formData: FormData) {
         name: formData.get("name")
       });
     await db.group.update({ where: { id: fd.id }, data: fd });
-    revalidatePath("/group/"+fd.id);
+    //revalidatePath("/group/"+fd.id);
+    redirect("/group");
   }
   
   export async function deleteUserFromGroup(formData: FormData) {

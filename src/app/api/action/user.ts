@@ -58,5 +58,6 @@ export async function createUser(formData: FormData) {
         role: formData.get("role"),
       });
     await db.user.update({ where: { id: fd.id }, data: fd });
-    revalidatePath("/user/"+fd.id);
+    //revalidatePath("/user/"+fd.id);
+    redirect("/user");
   }

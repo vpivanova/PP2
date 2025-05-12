@@ -35,7 +35,8 @@ export async function updateTaskType(formData: FormData) {
       name: formData.get("name"),
     });
   await db.taskType.update({ where: { id: fd.id }, data: fd });
-  revalidatePath("/taskType/" + fd.id);
+  revalidatePath("/taskType");
+  //revalidatePath("/taskType/" + fd.id);
 }
 
 export async function deleteTaskType(formData: FormData) {

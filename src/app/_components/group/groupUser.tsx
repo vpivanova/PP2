@@ -32,7 +32,7 @@ function UserTable({ users, id_group }: { users: User[]; id_group: string }) {
                             <td className="px-2">{user.surname}</td>
                             <td className="px-2">{user.email}</td>
                             <td className="px-2">
-                                <form action={deleteUserFromGroup} className="form-control">
+                                <form action={deleteUserFromGroup as any} className="form-control">
                                     <div className="flex max-w-xs flex-col space-y-2">
                                         <input
                                             type="hidden"

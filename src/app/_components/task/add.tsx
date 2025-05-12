@@ -5,7 +5,7 @@ import { createTask } from "~/app/api/action/task";
 
 export function AddTask({ taskType }: { taskType: TaskType }) {  
   return (
-    <form action={createTask} className="form-control">
+    <form action={createTask as any} className="form-control">
       <div className="flex max-w-xs flex-col space-y-2">
         <input type="hidden" name="taskTypeId" defaultValue={taskType.id} />
         <label>Название</label>
@@ -21,7 +21,8 @@ export function AddTask({ taskType }: { taskType: TaskType }) {
           type="number"
           name="value"
           required
-          className="input input-bordered"
+          //className="input input-bordered"
+          className="input input-bordered form-control"
           defaultValue={1}
         />
         <button type="submit" className="btn btn-primary">

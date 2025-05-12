@@ -13,6 +13,7 @@ import TutorSearch from "~/app/ui/tutorSearch";
 import { Students } from "../squad/students";
 import { deleteTutor } from "~/app/api/action/squad";
 import { UserMinusIcon } from "@heroicons/react/24/outline";
+import { addUserTask, deleteTask, deleteUserTask, updateTask } from "~/app/api/action/task";
 
 
 
@@ -29,10 +30,9 @@ export default function Admin({ user }: AdminProps) {
       </Link>
     </>
   );
-
   return (
     <main>
-      <form action={updateUser} className="form-control">
+      <form action={updateUser as any} className="form-control">
         <div className="flex max-w-xs flex-col space-y-2">
           <input type="hidden" name="id" defaultValue={user.id ?? ""} />
           <label>Электронная почта</label>
@@ -76,7 +76,7 @@ export default function Admin({ user }: AdminProps) {
           </button>
         </div>
       </form>
-      <form action={deleteUser} className="form-control">
+      <form action={deleteUser as any} className="form-control">
         <div className="flex max-w-xs flex-col space-y-2">
           <input type="hidden" name="id" defaultValue={user.id ?? ""} />
           <button type="submit" className="btn btn-primary">
@@ -99,7 +99,7 @@ export function AdminGroupComp({
 }) {
   return (
     <main>
-      <form action={updateGroup} className="form-control">
+      <form action={updateGroup as any} className="form-control">
         <div className="flex max-w-xs flex-col space-y-2">
           <input type="hidden" name="id" defaultValue={group.id ?? ""} />
           <label>Название</label>
@@ -115,7 +115,7 @@ export function AdminGroupComp({
           </button>
         </div>
       </form>
-      <form action={deleteGroup} className="form-control">
+      <form action={deleteGroup as any} className="form-control">
         <div className="flex max-w-xs flex-col space-y-2">
           <input type="hidden" name="id" defaultValue={group.id ?? ""} />
           <button type="submit" className="btn btn-primary">
@@ -137,7 +137,7 @@ export function AdminTaskComp({ task, taskType }: { task: any; taskType: any }) 
       <Link href={`/taskType/${task.taskTypeId}`} className="btn btn-primary">
         {taskType?.name}
       </Link>
-      <form action="/api/updateTask" className="form-control">
+      <form action={updateTask as any} className="form-control">
         <div className="flex max-w-xs flex-col space-y-2">
           <input type="hidden" name="id" defaultValue={task.id ?? ""} />
           <label>Название</label>
@@ -172,7 +172,7 @@ export function AdminTaskComp({ task, taskType }: { task: any; taskType: any }) 
               </td>
               <td>
                 {index !== 0 && (
-                  <form action="/api/deleteUserTask" className="form-control">
+                  <form action={deleteUserTask as any} className="form-control">
                     <input
                       type="hidden"
                       name="id"
@@ -188,7 +188,7 @@ export function AdminTaskComp({ task, taskType }: { task: any; taskType: any }) 
           ))}
         </tbody>
       </table>
-      <form action="/api/addUserTask" className="form-control">
+      <form action={addUserTask as any} className="form-control">
         <div className="flex max-w-xs flex-col space-y-2">
           <input type="hidden" name="id" defaultValue={task.id ?? ""} />
           <button type="submit" className="btn btn-primary">
@@ -196,7 +196,7 @@ export function AdminTaskComp({ task, taskType }: { task: any; taskType: any }) 
           </button>
         </div>
       </form>
-      <form action="/api/deleteTask" className="form-control">
+      <form action={deleteTask as any} className="form-control">
         <div className="flex max-w-xs flex-col space-y-2">
           <input type="hidden" name="id" defaultValue={task.id ?? ""} />
           <input
@@ -216,7 +216,7 @@ export function AdminTaskComp({ task, taskType }: { task: any; taskType: any }) 
 export function AdminTaskTypeComp({ taskType, tasks }: { taskType: any; tasks: any[] }) {
   return (
     <main>
-      <form action={updateTaskType} className="form-control">
+      <form action={updateTaskType as any} className="form-control">
         <div className="flex max-w-xs flex-col space-y-2">
           <input type="hidden" name="id" defaultValue={taskType.id ?? ""} />
           <label>Название</label>
@@ -232,7 +232,7 @@ export function AdminTaskTypeComp({ taskType, tasks }: { taskType: any; tasks: a
           </button>
         </div>
       </form>
-      <form action={deleteTaskType} className="form-control">
+      <form action={deleteTaskType as any} className="form-control">
         <div className="flex max-w-xs flex-col space-y-2">
           <input type="hidden" name="id" defaultValue={taskType.id ?? ""} />
           <button type="submit" className="btn btn-primary">

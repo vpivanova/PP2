@@ -8,7 +8,7 @@ export function AddTaskGroup() {
         <summary className="collapse-title text-xl font-medium">
           <FolderPlusIcon className="w-6" />
         </summary>
-        <form action={createTaskType} className="collapse-content form-control">
+        <form action={createTaskType as any} className="collapse-content form-control">
           <div className="flex flex-col max-w-xs space-y-2">
             <label>Название</label>
             <input type="text" name="name" required className="input input-bordered"/>

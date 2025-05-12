@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+      "**/*.spec.ts": "typescriptreact", // или "typescript" для файлов Playwright
+      "**/*.test.tsx": "typescriptreact"  // для файлов Vitest
+    }
+}
+  

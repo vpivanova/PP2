@@ -7,16 +7,18 @@ import { api } from "../../../trpc/react";
 export function Grade({
   taskId,
   studentId,
+  squadTutorId,
 }: {
   taskId: string;
   studentId: string;
+  squadTutorId: string;
 }) {
   const valRef = useRef<HTMLInputElement>(null);
   const grades = api.grade.getByTask.useQuery({ taskId });
   const set = api.grade.create.useMutation();
   console.log(grades.data);
   const onSetHandler = () => {
-    set.mutate({ taskId, studentId, value: Number(valRef.current?.value) });
+    set.mutate({ taskId, studentId, value: Number(valRef.current?.value), squadTutorId: squadTutorId, });
   };
 
   return (
