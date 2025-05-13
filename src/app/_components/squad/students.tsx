@@ -24,9 +24,15 @@ export function Students({
   const grades = api.grade.getByTask.useQuery({ taskId }).data ?? [];
   const r = api.user.getByQuery.useQuery({ query: search }).data;
 
-  const studentsWithGrades = students.map((s) => {
-    const g = grades.find((g) => g.studentId === s.id);
-    return { ...s, value: g?.value ?? 0 };
+  // const studentsWithGrades = students.map((s) => {
+  //   const g = grades.find((g) => g.studentId === s.id);
+  //   return { ...s, value: g?.value ?? 0 };
+  const studentsWithGrades = students.map((student) => {
+    const studentGrades = grades.filter((g) => g.studentId === student.id);
+
+    const lastGrade = studentGrades.length > 0 ? studentGrades[studentGrades.length - 1] : null;
+  
+    return { ...student, value: lastGrade?.value ?? 0 };
   });
   console.log(studentsWithGrades);
 
